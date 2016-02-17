@@ -1,3 +1,4 @@
+
 public class Card implements Comparable<Card> {
 	private static String suitNames[] = {"Hearts","Diamonds","Clubs","Spades"};
 	private static String rankNames[] = {"narf","narf","2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"};

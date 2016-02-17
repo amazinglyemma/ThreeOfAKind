@@ -16,8 +16,8 @@ public class Hand {
 	}
 
 	public void discardCard(int card, Deck deck) {
-		deck.addCard(hand.get(card - 1));
-		hand.remove(card - 1);
+		deck.addCard(hand.get(card));
+		hand.remove(card);
 	}
 
 	public void takeCard(Deck deck) {
@@ -56,23 +56,22 @@ public class Hand {
 		for (int i = 0; i <= 2; i++) {
 			if (rankMatch == hand.get(i).rank) {
 				if (rankMatch == hand.get(i + 1).rank) {
-					if (i + 3 > 5) {
-						return 1;
+					if (i + 2 > 5) {
+						return 0; // if next card value is greater than hand limit, discard 1st card.
 					}
-					return i + 3;
+					return i + 2;
 				}
-				return i + 2;
+				return i + 1;
 			}
 		}
 		if (rankMatch == hand.get(3).rank) {
 			if (hand.get(0).rank == hand.get(1).rank) {
 				//last card matches. 1st and 2nd card match eachother, discard 3rd.
-				return 3;
+				return 2;
 			}
 			//Last card matches, 1st and 2nd do not. Discard 1st card.
-			return 1;
+			return 0;
 		}
-		return 5;
+		return 4;
 	}
-
 }

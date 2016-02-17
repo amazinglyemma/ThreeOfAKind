@@ -5,7 +5,7 @@ public class Application {
 	private static Scanner input;
 
 	public static void main(String[] args) {
-		int num;
+		int num = -1;
 		String choice = "null";
 		// Create discard deck
 		Deck discardDeck = new Deck();
@@ -42,24 +42,23 @@ public class Application {
 				discardDeck.shuffleDiscard(deck);
 				deck.discard(discardDeck);
 			}
-			
+
 			// show player hand
 			playerHand.sort();
 			playerHand.showHand();
-			
-			//show discard pile
+
+			// show discard pile
 			System.out.println();
 			System.out.println(discardDeck.currentCard());
-			
-			//get user input
 
+			// get user input
 			input = new Scanner(System.in);
 			System.out.println("Take, or Draw?");
 			choice = input.nextLine();
-			
+
+			// validate user input
 			choice = choice.toLowerCase();
-			while (!(choice.equals("draw")) && !(choice.equals("take"))){
-				System.out.println("Invalid option");
+			while (!(choice.equals("draw")) && !(choice.equals("take"))) {
 				System.out.println("Take, or Draw?");
 				choice = input.nextLine();
 				choice.toLowerCase();
@@ -69,25 +68,35 @@ public class Application {
 			switch (choice) {
 			case "take":
 				playerHand.takeCard(discardDeck); // take card from discardDeck
-
+				
+				//ask for discard
 				System.out.println("Choose a card to discard: 1,2,3,4");
-				num = input.nextInt();
+				num = input.nextInt() - 1; // subtract 1 to align with 0 indexed arrayList
+			
 
-				if (num < 1 || num > 4) { // ERROR CATCH
-					System.out.println("INVALID ENTRY");
+				while (num < 0 || num > 3) { // ERROR CATCH
+					System.out.println("Error: Enter an integer between 1 -4");
+					System.out.println("Choose a card to discard: 1,2,3,4");
+					num = input.nextInt() - 1; // subtract 1 to align with 0 indexed arrayList
 				}
 
-				else {
-					playerHand.discardCard(num, discardDeck);
-				}
+				playerHand.discardCard(num, discardDeck);
 
 				break;
 			case "draw":
 				System.out.println("Card Drawn: " + deck.currentCard());
 				playerHand.takeCard(deck);
-
-				System.out.println("Choose a card to discard: 1,2,3,4, or 5 for new card");
-				num = input.nextInt();
+				
+				// ask for discard
+				System.out.println("Choose a card to discard: 1,2,3,4 or 5 for drawn card");
+				num = input.nextInt() - 1; // subtract 1 to align with 0 indexed arrayList
+				
+				while (num < 0 || num > 4) { // ERROR CATCH
+					System.out.println("Error: Enter an integer between 1 - 5");
+					System.out.println("Choose a card to discard: 1,2,3,4 or 5 for drawn card");
+					num = input.nextInt() - 1; // subtract 1 to align with 0 indexed arrayList
+				}
+				
 				playerHand.discardCard(num, discardDeck);
 
 			}
@@ -103,28 +112,28 @@ public class Application {
 			//////////////////////////// ////////////////////////
 			System.out.println("COMPUTERS TURN!!!!!");
 			computerHand.sort();
-			
-			// See if the card in the discard deck matches a card in the computerHand
+
+			// See if the card in the discard deck matches a card in the
+			// computerHand
 			int match = 0;
-			for (Card card: computerHand.getHand()){
-				if (card.rank == (discardDeck.currentCard().rank)){
+			for (Card card : computerHand.getHand()) {
+				if (card.rank == (discardDeck.currentCard().rank)) {
 					match++;
-					}
+				}
 			}
-			
-			if (match > 0){
-					computerHand.takeCard(discardDeck);
-					computerHand.discardCard(computerHand.pickDiscard(), discardDeck);
-					System.out.println("Computer picks from discard pile");
-					System.out.println();
-				}
-				else {
-					computerHand.takeCard(deck);
-					computerHand.discardCard(computerHand.pickDiscard(), discardDeck);
-					System.out.println("Computer picks from draw pile");
-					System.out.println();
-				}
-			if (computerHand.isWin()){
+
+			if (match > 0) {
+				computerHand.takeCard(discardDeck);
+				computerHand.discardCard(computerHand.pickDiscard(), discardDeck);
+				System.out.println("Computer picks from discard pile");
+				System.out.println();
+			} else {
+				computerHand.takeCard(deck);
+				computerHand.discardCard(computerHand.pickDiscard(), discardDeck);
+				System.out.println("Computer picks from draw pile");
+				System.out.println();
+			}
+			if (computerHand.isWin()) {
 				System.out.println("Computer wins!");
 				break;
 			}
